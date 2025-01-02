@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "properties",
+      "type": "devonboot.sample.office.function.configuration.controller.ConfigurationController",
+      "sourceType": "devonboot.sample.office.function.configuration.controller.ConfigurationController"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
