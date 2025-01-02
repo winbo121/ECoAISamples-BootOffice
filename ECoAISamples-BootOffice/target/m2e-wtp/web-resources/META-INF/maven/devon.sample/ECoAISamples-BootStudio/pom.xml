@@ -124,11 +124,11 @@
 <!--		    <artifactId>devon-tester-aide</artifactId>-->
 <!--		    <version>0.1</version>-->
 <!--		</dependency>-->
-		<dependency>
-		    <groupId>com.lide.trex</groupId>
-		    <artifactId>trexhandler</artifactId>
-		    <version>0.1</version>
-		</dependency>
+<!--		<dependency>-->
+<!--		    <groupId>com.lide.trex</groupId>-->
+<!--		    <artifactId>trexhandler</artifactId>-->
+<!--		    <version>0.1</version>-->
+<!--		</dependency>-->
         
         <dependency>
             <groupId>org.springframework.boot</groupId>
