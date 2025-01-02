@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>devon.boot</groupId>
+		<artifactId>devon-boot-parent</artifactId>
+		<version>2.0.0</version>
+		<relativePath />
+	</parent>
+	<groupId>devon.sample</groupId>
+	<artifactId>ECoAISamples-BootStudio</artifactId>
+	<name>ECoAISamples-BootStudio</name>
+	<description>DevOn Boot Sample Office</description>
+	<packaging>war</packaging>
+	<version>2.0.0</version>
+
+	<properties>
+		<tiles.version>3.0.8</tiles.version>
+		<start-class>devonboot.sample.office.DevOnOfficeApplication</start-class>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>devon-public-repository</id>
+			<name>DevOn Framework Public Repository</name>
+			<layout>default</layout>
+			<url>http://www.dev-on.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>lena-repository</id>
+			<name>Embedded LENA Repository</name>
+			<layout>default</layout>
+			<url>https://repo.lenalab.org:8443/repository/release</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>devon.boot</groupId>
+			<artifactId>devon-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+		<dependency>
+			<groupId>devon.boot</groupId>
+			<artifactId>devon-boot-starter-log4j2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+	
+
+		<!-- HSQL DB -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tiles</groupId>
+			<artifactId>tiles-extras</artifactId>
+			<version>${tiles.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tiles</groupId>
+					<artifactId>tiles-freemarker</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>lena</groupId>
+			<artifactId>spring-boot-starter-lena</artifactId>
+		</dependency>
+<!-- 
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency> -->
+			<dependency>
+		<groupId>org.hsqldb</groupId>
+		<artifactId>hsqldb</artifactId>
+	</dependency>
+<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.16.20</version>
+</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<!-- devon tester -->
+		<dependency>
+		    <groupId>com.lide.uta</groupId>
+		    <artifactId>devon-tester-aide</artifactId>
+		    <version>0.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.lide.trex</groupId>
+		    <artifactId>trexhandler</artifactId>
+		    <version>0.1</version>
+		</dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>
+			

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EmployeeForExcel">
+    <select id="retrieveEmployeeList" resultType="employeeForExcel">
+        <![CDATA[
+        SELECT A.NUM
+             , A.NAME
+             , A.JOBLEVEL_CODE
+             , A.SKILL_CODE
+             , A.TELEPHONE
+             , A.BIRTHDATE
+             , B.NAME AS "JOBLEVEL_CODE_NAME"
+             , C.NAME AS "SKILL_CODE_NAME"
+          FROM SAM_EXCEL_EMPLOYEE A
+               JOIN SAM_JOBLEVEL B
+            ON A.JOBLEVEL_CODE = B.CODE
+               JOIN SAM_SKILL C
+            ON A.SKILL_CODE = C.CODE
+         WHERE 1=1
+        ]]>
+        <if test="skillCode != null and skillCode != ''">
+        <![CDATA[ AND A.SKILL_CODE = #{skillCode} ]]>
+        </if>
+        <if test="joblevelCode != null and joblevelCode != ''">
+        <![CDATA[ AND A.JOBLEVEL_CODE = #{joblevelCode}  ]]>
+        </if>
+         ORDER BY A.NUM
+    </select>
+    
+    <insert id="insertEmployee">
+        <![CDATA[
+        INSERT INTO SAM_EXCEL_EMPLOYEE(
+               NUM
+             , NAME
+             , JOBLEVEL_CODE
+             , BIRTHDATE
+             , TELEPHONE
+             , SKILL_CODE
+        ) VALUES (
+             #{num}
+           , #{name}
+           , #{joblevelCode}
+           , #{birthdate}
+           , #{telephone}
+           , #{skillCode}
+        )
+        ]]>
+    </insert>    
+
+</mapper>

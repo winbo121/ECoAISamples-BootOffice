@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+
+
+    <select id="retrieveUser" resultType="user">
+		<![CDATA[
+			SELECT
+			       A.USR_ID "usrId"
+			       , A.USR_NM "usrNm"
+			       , A.USR_PW "usrPw"
+			       , A.REG_DT "regDt"
+			       , A.CHNG_USR_ID "chngUsrId"
+			       , A.CHNG_DT "chngDt"
+			       , A.LANG_CLCD "language"
+	      	       , A.ROLE "role"
+	      	       , role.NAME "roleNm"
+			  FROM SAM_USER A
+	  		  LEFT OUTER JOIN SAM_CODE role ON (A.role = role.code AND role.code_group = 'ROLE')
+			 WHERE A.USR_ID = #{usrId}
+		]]>
+    </select>
+
+    <insert id="insertUser">
+		<![CDATA[
+			INSERT INTO SAM_USER (
+			      USR_ID
+			    , USR_NM
+			    , USR_PW
+			    , REG_DT
+			    , CHNG_USR_ID
+			    , CHNG_DT
+			    , LANG_CLCD
+			    , ROLE
+			) VALUES (
+			      #{usrId}
+			    , #{usrNm}
+			    , #{usrPw, jdbcType=VARCHAR}
+			    , TO_CHAR(CURRENT_TIMESTAMP,'YYYYMMDDHH24MISS')
+			    , #{chngUsrId}
+			    , TO_CHAR(CURRENT_TIMESTAMP,'YYYYMMDDHH24MISS')
+			    , #{language, jdbcType=VARCHAR}
+			    , #{role, jdbcType=VARCHAR}
+			)
+		]]>
+    </insert>
+
+    <update id="updateEmployee">
+		<![CDATA[
+			UPDATE SAM_USER
+			   SET USR_ID = #{usrId}
+			       , USR_NM = #{usrNm}
+			       , USR_PW = #{usrPw}
+			       , ROLE = #{role}
+			       , CHNG_USR_ID = #{chngUsrId}
+			       , CHNG_DT = TO_CHAR(CURRENT_TIMESTAMP,'YYYYMMDDHH24MISS')
+			       , LANG_CLCD = #{language}
+			 WHERE USR_ID = #{usrId}
+		]]>
+    </update>
+
+    <delete id="deleteUser">
+		<![CDATA[
+			DELETE
+			  FROM SAM_USER
+			 WHERE USR_ID = #{usrId}
+		]]>
+    </delete>
+
+    <select id="retrieveUserList" resultType="user">
+		<![CDATA[
+			SELECT
+			       A.USR_ID "usrId"
+			       , A.USR_NM "usrNm"
+			       , A.USR_PW "usrPw"
+			       , A.REG_DT "regDt"
+			       , A.CHNG_USR_ID "chngUsrId"
+			       , A.CHNG_DT "chngDt"
+	      	       , role.NAME "roleNm"
+			       , A.LANG_CLCD "language"
+			  FROM TDT_USER A
+	  		  LEFT OUTER JOIN SAM_CODE role ON (A.role = role.code AND role.code_group = 'ROLE')
+			 WHERE 1=1
+		]]>
+    </select>
+
+</mapper>

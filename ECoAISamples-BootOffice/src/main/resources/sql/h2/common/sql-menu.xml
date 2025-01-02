@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Menu">
+    <select id="retrieveTopMenuList" resultType="devonboot.sample.office.common.menu.model.Menu">
+        <![CDATA[
+        SELECT menu_id
+             , menu_name
+             , menu_level
+             , menu_sequence
+             , parent_menu_id
+          FROM sam_menu
+         WHERE menu_level IN (1, 2)
+           AND use_flag = 'Y'
+         ORDER BY menu_level
+                , menu_sequence
+        ]]>
+    </select>
+    <select id="retrieveLeftMenuList" resultType="devonboot.sample.office.common.menu.model.Menu">
+        <![CDATA[
+        SELECT DISTINCT A.menu_id
+            , A.menu_name
+            , A.menu_level
+            , A.menu_sequence
+            , A.parent_menu_id
+            , C.action_url
+         FROM sam_menu A
+              LEFT OUTER JOIN sam_menu_action B
+           ON B.default_menuaction_flag = 'Y'
+          AND B.menu_id = A.menu_id
+              LEFT OUTER JOIN sam_action C
+           ON B.action_id = C.action_id
+        WHERE A.use_flag = 'Y'
+        ORDER BY A.menu_id
+               , A.menu_sequence
+        ]]>
+    </select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration packages="devonframe.log.log4j" monitorInterval="5">
+
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d %5p [%c] %m%n" />
+		</Console>
+
+		<File name="file" fileName="./logs/file/sample.log" append="false">
+			<PatternLayout pattern="%d %5p [%c] %m%n" />
+		</File>
+
+		<DB name="DBAppender" tableName="db_log">
+			<ConnectionFactory class="devonframe.log.log4j.appender.db.DevOnConnectionFactory" method="getDatabaseConnection" />
+			<Column name="event_id" literal="NEXT VALUE FOR logSequence"/> 
+			<Column name="timestmp" isEventTimestamp="true"/>
+			<Column name="thread_name" pattern="%t"/>
+			<Column name="formatted_message" pattern="%message"/>
+			<Column name="logger_name" pattern="%logger"/>
+			<Column name="level_string" pattern="%level"/>
+			<Column name="caller_filename" pattern="%file"/>
+			<Column name="caller_class" pattern="%class"/>
+			<Column name="caller_method" pattern="%method"/>
+			<Column name="caller_line" pattern="%line"/>
+			<Column name="exception" pattern="%ex{short}" />
+		</DB>
+	</Appenders>
+	
+	<Loggers>
+	
+    <!-- TraceLog -->
+    <Logger name="devonframe.log.trace.aspect" level="trace" additivity="false">
+    	<AppenderRef ref="STDOUT"/>
+    </Logger>
+    
+    <Logger name="devonboot.sample.office" level="info" additivity="false">
+    	<AppenderRef ref="STDOUT"/>
+    	<AppenderRef ref="DBAppender"/> 
+    </Logger>
+    
+     <Logger name="org.springframework" level="info" additivity="false">
+    	<AppenderRef ref="STDOUT"/>
+    </Logger>
+        
+    <Root level="info">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+
+	</Loggers>
+</Configuration>
+
+

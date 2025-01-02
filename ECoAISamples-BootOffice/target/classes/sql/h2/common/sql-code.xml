@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Code">
+
+    <select id="retrieveSkillCodeList" resultType="code" >
+        <![CDATA[
+        SELECT CODE
+             , NAME "VALUE"
+          FROM SAM_SKILL
+        ]]>
+    </select>
+
+    <select  id="retrieveDivisionCodeList" resultType="code">
+        <![CDATA[
+        SELECT CODE
+             , NAME "VALUE"
+          FROM SAM_DIVISION
+        ]]>
+    </select>
+
+    <select id="retrieveDepartmentCodeList" resultType="code">
+        <![CDATA[
+        SELECT CODE
+             , NAME "VALUE"
+          FROM SAM_DEPARTMENT
+          WHERE 1=1
+        ]]>
+        <if test="codeGroup != null and codeGroup != ''">
+        <![CDATA[ AND DIV_CODE = #{codeGroup} ]]>
+        </if>
+    </select>
+
+    <select id="retrieveJobLevelCodeList" resultType="code">
+        <![CDATA[
+        SELECT CODE
+             , NAME "VALUE"
+          FROM SAM_JOBLEVEL
+        ]]>
+    </select>
+
+</mapper>

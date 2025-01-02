@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="LogDb">
+
+    <select id="retrieveLogDbList" resultType="logDb">
+        <![CDATA[
+        SELECT EVENT_ID
+        	 , THREAD_NAME
+        	 , TIMESTMP
+             , FORMATTED_MESSAGE
+             , LOGGER_NAME
+             , LEVEL_STRING
+             , CALLER_FILENAME
+             , CALLER_CLASS
+             , CALLER_METHOD
+             , CALLER_LINE
+             , EXCEPTION
+          FROM DB_LOG
+         WHERE 1=1
+        ]]>
+        <if test="levelString != null and levelString != ''">
+        <![CDATA[ AND LEVEL_STRING = #{levelString} ]]>
+        </if>
+    </select>    
+      
+</mapper>

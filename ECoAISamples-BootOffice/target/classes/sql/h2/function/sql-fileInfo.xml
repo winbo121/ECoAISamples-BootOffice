@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="FileInfo">
+
+    <insert id="insertFileInfo" >
+        <![CDATA[
+        INSERT INTO SAM_FILE_INFO(
+               FILE_NAME
+             , UPLOAD_FILE_PATH
+             , UPLOAD_FILE_NAME
+             , FILE_SIZE
+             , UPLOAD_DATE
+        ) VALUES (
+             #{fileName}
+           , #{uploadFilePath}
+           , #{uploadFileName}
+           , #{fileSize}
+           , #{uploadDate}
+        )
+        ]]>
+    </insert>  
+    
+    <select id="retrieveFileInfoList" resultType="fileInfo">
+        SELECT FILE_NAME
+             , UPLOAD_FILE_PATH
+             , UPLOAD_FILE_NAME
+             , FILE_SIZE
+             , UPLOAD_DATE
+          FROM SAM_FILE_INFO
+         WHERE 1=1    
+        <if test="fileName != null and fileName != ''">
+        <![CDATA[ AND FILE_NAME like '%'||#{fileName}||'%'  ]]>
+        </if>
+        <if test="uploadDate != null and uploadDate != ''">
+        <![CDATA[ AND UPLOAD_DATE = #{uploadDate}  ]]>
+        </if>
+    </select>
+    
+    <delete id="deleteFileInfo">
+        <![CDATA[
+        DELETE FROM SAM_FILE_INFO
+        WHERE FILE_NAME = #{fileName}
+        AND UPLOAD_FILE_PATH = #{uploadFilePath}
+        ]]>    
+    
+    </delete>
+
+</mapper>

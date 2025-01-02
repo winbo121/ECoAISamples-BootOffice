@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Employee">
+
+<select id="retrieveEmployee" resultType="employee">
+		<![CDATA[
+		SELECT A.NUM
+		     , B.NAME AS "JOBLEVEL_CODE_NAME"
+		     , A.JOBLEVEL_CODE
+		     , A.NAME
+		     , C.NAME AS "DEPARTMENT_CODE_NAME"
+		     , A.DIVISION_CODE
+		     , A.DEPARTMENT_CODE
+		     , A.BIRTHDATE
+		     , A.SEX
+		     , A.SSN
+		     , A.TELEPHONE
+		     , A.POSTAL
+		     , D.NAME AS "SKILL_CODE_NAME"
+		     , A.SKILL_CODE
+		     , A.ADDRESS
+		  FROM SAM_EMPLOYEE A
+		       LEFT OUTER JOIN SAM_JOBLEVEL B
+		    ON A.JOBLEVEL_CODE = B.CODE
+		       LEFT OUTER JOIN SAM_DEPARTMENT C
+		    ON (A.DIVISION_CODE || A.DEPARTMENT_CODE) = (C.DIV_CODE || C.CODE)
+		       LEFT OUTER JOIN SAM_SKILL D
+		    ON A.SKILL_CODE = D.CODE
+		       LEFT OUTER JOIN SAM_DIVISION E
+		    ON E.CODE = C.CODE
+		 WHERE A.NUM = #{num}
+		 and 2=2
+		]]>
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

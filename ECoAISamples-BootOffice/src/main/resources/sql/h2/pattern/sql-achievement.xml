@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Achievement">
+
+    <select id="retrieveAchievementList" resultType="achievement">
+        <![CDATA[
+         SELECT NUM
+             , YYYY
+             , MM
+             , VALUE
+             , ETC
+          FROM SAM_ACHIEVEMENT
+         WHERE NUM = #{num}  
+        ]]>
+    </select>   
+    
+    <insert id="insertAchievement">
+        <![CDATA[
+        INSERT INTO SAM_ACHIEVEMENT(
+               NUM
+             , YYYY
+             , MM
+             , VALUE
+             , ETC
+        ) VALUES (
+               #{num}
+             , #{yyyy}
+             , #{mm}
+             , #{value}
+             , #{etc}
+        )        
+        ]]>
+       
+    </insert>
+    
+    <update id="updateAchievement">
+        <![CDATA[
+         UPDATE SAM_ACHIEVEMENT
+           SET NUM = #{num}
+        ]]>
+        <if test="value != null and value != ''">
+        <![CDATA[ , VALUE = #{value} ]]>
+        </if>
+        <if test="etc != null and etc != ''">
+        <![CDATA[ , ETC = #{etc}  ]]>
+        </if>
+        WHERE NUM = #{num}
+          AND YYYY = #{yyyy}
+          AND MM = #{mm}
+    </update>  
+    
+    <delete id="deleteAchievement">
+        <![CDATA[
+        DELETE
+          FROM SAM_ACHIEVEMENT
+         WHERE NUM = #{num}
+        ]]>
+         <if test="yyyy != null and yyyy != ''">
+        <![CDATA[ AND YYYY = #{yyyy} ]]>
+        </if>
+        <if test="mm != null and mm != ''">
+        <![CDATA[ AND MM = #{mm}  ]]>
+        </if>
+    </delete>
+            
+</mapper>

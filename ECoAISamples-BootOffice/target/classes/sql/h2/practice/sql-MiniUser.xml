@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><mapper namespace="practice.MiniUser">
+
+
+<insert id="insertMiniUser"><![CDATA[
+    INSERT   INTO MINI_USER (
+             CUST_NO
+           , CUST_NM
+           , BRTH_DY
+           , EMAIL_ID
+           , MOBILE_NO
+    ) VALUES (
+             #{custNo}
+           , #{custNm}
+           , #{brthDy}
+           , #{emailId}
+           , #{mobileNo}
+    )
+]]></insert>
+
+
+
+<delete id="deleteMiniUser"><![CDATA[
+    DELETE   FROM MINI_USER
+	WHERE    CUST_NO = #{custNo}
+]]></delete>
+
+
+
+<select id="retrieveMiniUser" resultType="devonboot.sample.office.common.practice.model.MiniUser"><![CDATA[
+    SELECT   T.CUST_NO
+           , T.CUST_NM
+           , T.BRTH_DY
+           , T.EMAIL_ID
+           , T.MOBILE_NO
+    FROM     MINI_USER T
+	WHERE    T.CUST_NO = #{custNo}
+]]></select>
+
+
+
+<update id="updateMiniUser"><![CDATA[
+    UPDATE   MINI_USER
+    SET      CUST_NO = #{custNo}
+           , CUST_NM = #{custNm}
+           , BRTH_DY = #{brthDy}
+           , EMAIL_ID = #{emailId}
+           , MOBILE_NO = #{mobileNo}
+	WHERE    CUST_NO = #{custNo}
+]]></update>
+
+</mapper>

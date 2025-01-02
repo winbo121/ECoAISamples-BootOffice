@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Build-Jdk-Spec: 17
+Implementation-Title: ECoAISamples-BootStudio
+Implementation-Version: 2.0.0
+Main-Class: devonboot.sample.office.DevOnOfficeApplication
+Created-By: Maven Integration for Eclipse
+

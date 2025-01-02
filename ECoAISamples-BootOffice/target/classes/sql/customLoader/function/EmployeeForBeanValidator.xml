@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EmployeeForBeanValidator">
+
+    <select id="retrieveEmployee" resultType="employeeForBeanValidator">
+        <![CDATA[
+        SELECT A.NUM
+             , B.NAME AS "JOBLEVEL_CODE_NAME"
+             , A.JOBLEVEL_CODE
+             , A.NAME
+             , C.NAME AS "DEPARTMENT_CODE_NAME"
+             , A.DIVISION_CODE
+             , A.DEPARTMENT_CODE
+             , A.BIRTHDATE
+             , A.SEX
+             , A.SSN
+             , A.TELEPHONE
+             , A.POSTAL
+             , D.NAME AS "SKILL_CODE_NAME"
+             , A.SKILL_CODE
+             , A.ADDRESS
+          FROM SAM_EMPLOYEE A
+               LEFT OUTER JOIN SAM_JOBLEVEL B
+            ON A.JOBLEVEL_CODE = B.CODE
+               LEFT OUTER JOIN SAM_DEPARTMENT C
+            ON (A.DIVISION_CODE || A.DEPARTMENT_CODE) = (C.DIV_CODE || C.CODE)
+               LEFT OUTER JOIN SAM_SKILL D
+            ON A.SKILL_CODE = D.CODE
+               LEFT OUTER JOIN SAM_DIVISION E
+            ON E.CODE = C.CODE
+         WHERE A.NUM = #{num}
+        ]]>
+    </select>
+    
+    <insert id="insertEmployee">
+        <![CDATA[
+        INSERT INTO SAM_EMPLOYEE(
+               NUM
+             , NAME
+             , JOBLEVEL_CODE
+             , DIVISION_CODE
+             , DEPARTMENT_CODE
+             , BIRTHDATE
+             , SEX
+             , SSN
+             , TELEPHONE
+             , POSTAL
+             , SKILL_CODE
+             , ADDRESS
+        ) VALUES (
+             #{num}
+           , #{name}
+           , #{joblevelCode}
+           , #{divisionCode}
+           , #{departmentCode}
+           , #{birthdate}
+           , #{sex}
+           , #{ssn}
+           , #{telephone}
+           , #{postal}
+           , #{skillCode}
+           , #{address}
+        )
+        ]]>
+    </insert>
+
+    <update id="updateEmployee">
+        <![CDATA[
+        UPDATE SAM_EMPLOYEE
+           SET NUM = NUM
+             , NAME = #{name}
+             , JOBLEVEL_CODE = #{joblevelCode}
+             , DIVISION_CODE = #{divisionCode}
+             , DEPARTMENT_CODE = #{departmentCode}
+             , BIRTHDATE = #{birthdate}
+             , SEX = #{sex}
+             , SSN = #{ssn}
+             , TELEPHONE = #{telephone}
+             , POSTAL = #{postal}
+             , SKILL_CODE = #{skillCode}
+             , ADDRESS = #{address}
+         WHERE NUM = #{num}
+        ]]>
+    </update>
+    
+    <delete id="deleteEmployee">
+        <![CDATA[
+        DELETE
+          FROM SAM_EMPLOYEE
+         WHERE NUM = #{num}
+        ]]>
+    </delete>     
+
+</mapper>

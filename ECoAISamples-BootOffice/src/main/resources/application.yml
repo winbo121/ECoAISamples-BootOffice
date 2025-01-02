@@ -1,0 +1,360 @@
+server: 
+  port: 9081
+  servlet:
+    context-path: /DevOnBootOffice
+    encoding:
+      enabled: true
+  shutdown: graceful
+  error:
+    whitelabel:
+       enabled: false
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+      
+  datasource:
+    platform: hsqldb
+    driver-class-name: org.hsqldb.jdbcDriver
+    url:  jdbc:hsqldb:file:C:\DevOnAICoding\workspace\ECoAITestDB\hsqldb\ECoAITestDB
+    username: sa
+    password: 
+#    initialization-mode: always
+    sql-script-encoding: utf-8
+    generate-unique-name: false
+#  h2:
+#    console:
+#      enabled: true
+#      path: /h2-console
+ #sql:
+ #  init:
+ #     schema-locations: classpath*:initdata/schema-postgresql.sql
+ #     data-locations: classpath*:initdata/data-postgresql.sql
+ #     mode: always 
+devon:
+#multipart설정
+  servlet:
+    multipart:
+      use-commons: false
+      max-upload-size: 244B
+      upload-temp-dir: file:C/fileUpload/temp
+      max-in-memory-size: 5
+      default-encoding: utf-8
+      preserve-filename: false
+      
+#interceptor설정
+  interceptor:
+    #Locale interceptor
+    locale-change:
+      param-name: lang
+    #CSRF방어를 위한 savedToken interceptor설정
+    saved-token: 
+      scope: request
+      apply-urls: 
+        - /function/webmvc/savedtoken/updateEmployee.do
+        - /function/webmvc/savedtoken/insertEmployee.do
+        - /function/webmvc/savedtoken/deleteEmployee.do
+    #XSS방어를 위한 XSS interceptor설정
+    xss: 
+       apply-urls: 
+        - /function/webmvc/savedtoken/updateEmployee.do
+        - /function/webmvc/savedtoken/insertEmployee.do
+        - /function/webmvc/savedtoken/deleteEmployee.do
+       message-code: error.real   
+ 
+  resolver: 
+    #Locale Resolver설정
+    locale:
+      header:
+        enabled: true
+    argument:   
+      #Map타입 사용 시 ArgumentResolver설정
+      collectionMethod: 
+        enabled: true
+        exclude-type-list:
+          - devonboot.sample.office.common.model.Employee
+          - devonboot.sample.office.common.model.EmployeeDetail       
+    exception: 
+      #HandlerException 설정
+      composite-header: 
+        exception-attribute: exceptionMessage
+        exception-code-attribute: exceptionMessageCode
+        error-logger-category: devonframe.exception.handler
+        header-mapping: 
+          X-Requested-With: XMLHttpRequest
+          ORIGIN: "*" 
+        error-view: ajaxView
+      simple-header: 
+        order: 1
+        header-name: 'X-Requested-With'
+        header-values: XMLHttpRequest
+        error-view: ajaxErrorView
+      base-simple-mapping: 
+        enabled: true
+        order: 2
+        warn-logger-category: errorLogger
+        exception-mappings: 
+          BusinessException: common/error/errorBusiness
+          SystemException: common/error/errorSystem
+          MyBatisSystemException: common/error/error
+        default-error-view: common/error/error
+       
+  mybatis:
+    #Commondao 설정
+    common-dao:
+      use-original-exception: true
+      exception-wrapper: devonframe.dataaccess.exception.CommonDaoExceptionWrapper
+    #Sql session 설정
+    sql-session:  
+      data-source: dataSource
+      config-location: classpath:/sql/configuration.xml
+      #mapper-locations: classpath:/sql/h2/**/sql-*.xml
+      #Query loader설정
+      custom-query-loader:
+        xml-query-loader:
+          enabled: true
+          mapper-locations: classpath:/sql/customLoader/**/*.xml
+          mapper-file-resolver: devonframe.dataaccess.mybatis.queryloader.DefaultMapperFileResolver 
+          auto-reload: false
+        db-query-loader:
+          enabled: false
+          data-source-name: dataSource 
+          table-name: TDO_STMT_INFO
+          namespace-column: BUZ_CD
+          stmt-id-column: STMT_ID
+          stmt-column: STMT
+          chng-dt: CHNG_DT  
+  config:
+    #Xml configuration설정
+    xml:
+      locations: classpath:/config/configuration/test.xml
+      properties-map: 
+        xml1: xml-Map1
+        xml2: xml-Map2
+      cache-duration: 3
+    #Properties configuratio설정
+    properties:
+      locations: classpath:/config/configuration/test.properties
+      properties-map: 
+        properties1: properties-Map1
+        properties2: properties-Map2
+      cache-duration: 3
+    #Composite configuration설정
+    composite:
+      enabled: true
+      locations: classpath:/config/configuration/test.properties,  classpath:/config/configuration/test.xml
+      properties-map: 
+        composite1: composite-Map1
+        composite2: composite-Map2
+      cache-duration: 3
+  
+  log:
+    #Log db appender설정    
+    appender:
+      db:
+        data-source: dataSource
+    #Trace log 설정
+    trace:
+      controller:
+        enabled: true
+        limited-count: 1
+        prefix: '[T]'
+        exclude-params: devonboot.sample.office.uipattern.employee.model.Employee, devonframe.log.trace.Trace  
+      service:
+        enabled: true
+        limited-count: 1
+        prefix: '[S]'
+      persistent:
+        enabled: true
+        prefix: '[P]'
+  #파일 업로드 설정
+  file-upload:
+    policy:
+      global-policy:
+        upload-target-dir: file:C:/fileupload
+        allow-pattern: "*"
+        deny-pattern: "*.jsp; *.exe"
+        rename-pattern: "{prefix}{date:yyyyMMdd}.{ext}"
+        max-total-file-size: 50MB
+        max-file-size: 30MB
+        sequence-allow: true
+        zero-size-allow: true
+      optional-policy-map:
+        policy1:
+          upload-target-dir: file:C:/fileupload
+          allow-pattern: "*"
+          deny-pattern: "*.exe"
+          rename-pattern: "{prefix}[{ext}].{ext}"
+          max-total-file-size: 30MB
+          max-file-size: 10KB
+          sequence-allow: true
+  #Message 설정
+  message:  
+    default-type: file
+    use-parent: true
+    file: 
+      basename: classpath:/messages/message-common, classpath:/messages/message-office, classpath:/messages/message-validator
+      cache-duration: 10
+      load-type: lazy
+    db:
+      data-source: dataSource
+      default-query: select * from sam_messages where attribute = 'Y'
+      table-name: sam_messages
+      message-column: message
+      code-column: code
+      locale-column: locale
+      
+  security:
+    #암호화설정
+    crypto:
+      aes:
+        enabled: true
+        key: zyDUGvQMx8bgF0G4VdF15g
+      des: 
+        enabled: true
+        key: H6E9xMRMqCzqbQ1YDa2RzROYrhCwW834
+      aria:
+        enabled: true
+        key: ImtdrJ3KwJMGcTsMQ7dBiA==
+  #페이지 설정      
+  paging:
+    #인덱스 페이지 설정
+    index-page:
+      server:
+        global-policy:
+          row-size: 5
+          page-size: 5
+          custom-row-size: 10, 15, 20
+        optional-policy-map: 
+            policy1: 
+               row-size: 3
+            policy2: 
+               row-size: 10
+               page-size: 3
+               custom-row-size: 10, 50, 100
+      ui:
+        global-policy: 
+          ui-class-name: devonboot.sample.office.common.config.paging.ui.SamplePagingUI
+          order-by-asc: ▲
+          order-by-desc: ▼
+          order-by-none: "" 
+          move-first-page: "[처음페이지]"
+          move-end-page: "[끝페이지]"
+          move-before-page: /resource/images/list_page_previous.gif
+          move-next-page: /resource/images/list_page_next.gif
+          move-before-index: ◀◀
+          move-next-index: ▶▶
+          index-seperator: " "
+ #        selected-index-font: "" 
+ #        index-font: ""
+ #        custom-row-size: 5,10,20
+        optional-policy-map: 
+          ajax: 
+            ui-class-name: devonboot.sample.office.common.config.paging.ui.SamplePagingUI
+    #스크롤 페이지 설정
+    scroll-page:
+      executor:
+        scroll-paging-transfer:
+          condition-key-separator: "|"
+          condition-key-orderby-separator: "@"
+          condition-key-value-equity-separator: "="
+      server:
+        global-policy: 
+          page-count: 10
+          custom-page-count: 5, 10, 20
+        optional-policy-map:
+          policy1: 
+            page-count: 5
+            custom-page-count: 5, 10, 20
+          policy2: 
+            page-count: 10
+            custom-page-count: 10, 50, 100
+      ui: 
+        global-policy:
+          ui-class-name: devonframe.scrollpaging.ui.DefaultScrollPagingUI
+          custom-page-count: 10, 20, 50
+  #메일 설정
+  mail:
+    policy:
+      global-policy:
+        test:
+          test-mode: false
+        smtp:
+          host: smtp.daum.net
+          port: 465
+          auth:
+            id: devontestmail@daum.net
+            password: devondevon
+            type: ssl
+            default-session-use: true
+            session-debug-message-flag: false
+        contents:
+          sender:
+            address: devon@lgcns.com
+            name: 데브온
+          content-type: 7bit
+          plain-content-type: text/plain 
+          html-content-type: text/html
+          charset-type: EUC-KR
+          encoding-type: Q
+      optional-policy-map:
+        mailPolicy2:
+          test:
+            test-mode: false
+          smtp:
+            host: smtp.gmail.com
+            port: 465
+            auth:
+              id: devontestmail@gmail.com
+              password: devondevon
+              type: ssl
+              default-session-use: true
+              session-debug-message-flag: false
+          contents:
+            sender:
+              address: devontestmail@gmail.com
+              name: DevOn
+            content-type: 7bit
+            plain-content-type: text/plain 
+            html-content-type: text/html
+            charset-type: UTF-8
+            encoding-type: Q
+        mailPolicy3:
+          test:
+            test-mode: true
+            test-receiver: devontestmail@daum.net
+          smtp:
+            host: smtp.gmail.com
+            port: 465
+            auth:
+              id: devontestmail
+              password: devondevon
+              type: ssl
+              default-session-use: true
+              session-debug-message-flag: false
+          contents:
+            sender:
+              address: devontestmail@gmail.com
+              name: DevOn
+            content-type: 7bit
+            plain-content-type: text/plain 
+            html-content-type: text/html
+            charset-type: UTF-8
+            encoding-type: Q
+      template-map:
+        mailTemplate1:
+          html:
+            directory: classpath:/devonframe/mail
+            html-name: template1.jsp
+            save-resolved-html: true
+            save-resolve-html-dir: d:/
+          image-server:
+            server-ip: 
+            server-port: 8080
+        mailTemplate2:
+          html:
+            directory: classpath:/devonframe/mail
+            html-name: template2.jsp
+            save-resolved-html: false
+            save-resolve-html-dir: d:/
+  

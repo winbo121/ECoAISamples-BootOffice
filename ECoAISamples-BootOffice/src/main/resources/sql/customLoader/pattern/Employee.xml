@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Employee">
+
+   <select id="retrieveEmployee" resultType="employee">
+		<![CDATA[
+		SELECT A.NUM
+		     , B.NAME AS "JOBLEVEL_CODE_NAME"
+		     , A.JOBLEVEL_CODE
+		     , A.NAME
+		     , C.NAME AS "DEPARTMENT_CODE_NAME"
+		     , A.DIVISION_CODE
+		     , A.DEPARTMENT_CODE
+		     , A.BIRTHDATE
+		     , A.SEX
+		     , A.SSN
+		     , A.TELEPHONE
+		     , A.POSTAL
+		     , D.NAME AS "SKILL_CODE_NAME"
+		     , A.SKILL_CODE
+		     , A.ADDRESS
+		  FROM SAM_EMPLOYEE A
+		       LEFT OUTER JOIN SAM_JOBLEVEL B
+		    ON A.JOBLEVEL_CODE = B.CODE
+		       LEFT OUTER JOIN SAM_DEPARTMENT C
+		    ON (A.DIVISION_CODE || A.DEPARTMENT_CODE) = (C.DIV_CODE || C.CODE)
+		       LEFT OUTER JOIN SAM_SKILL D
+		    ON A.SKILL_CODE = D.CODE
+		       LEFT OUTER JOIN SAM_DIVISION E
+		    ON E.CODE = C.CODE
+		 WHERE A.NUM = #{num}
+		 and 2=2
+		]]>
+    </select>
+
+    <insert id="insertEmployee">
+        <![CDATA[
+        INSERT INTO SAM_EMPLOYEE(
+               NUM
+             , NAME
+             , JOBLEVEL_CODE
+             , DIVISION_CODE
+             , DEPARTMENT_CODE
+             , BIRTHDATE
+             , SEX
+             , SSN
+             , TELEPHONE
+             , POSTAL
+             , SKILL_CODE
+             , ADDRESS
+        ) VALUES (
+             #{num}
+           , #{name}
+           , #{joblevelCode}
+           , #{divisionCode}
+           , #{departmentCode}
+           , #{birthdate}
+           , #{sex}
+           , #{ssn}
+           , #{telephone}
+           , #{postal}
+           , #{skillCode}
+           , #{address}
+        )
+        ]]>
+    </insert>
+
+    <update id="updateEmployee">
+        <![CDATA[
+        UPDATE SAM_EMPLOYEE
+           SET NUM = NUM
+             , NAME = #{name}
+             , JOBLEVEL_CODE = #{joblevelCode}
+             , DIVISION_CODE = #{divisionCode}
+             , DEPARTMENT_CODE = #{departmentCode}
+             , BIRTHDATE = #{birthdate}
+             , SEX = #{sex}
+             , SSN = #{ssn}
+             , TELEPHONE = #{telephone}
+             , POSTAL = #{postal}
+             , SKILL_CODE = #{skillCode}
+             , ADDRESS = #{address}
+         WHERE NUM = #{num}
+        ]]>
+    </update>
+
+    <update id="updateEmployeeForP2">
+        <![CDATA[
+        UPDATE SAM_EMPLOYEE
+           SET NAME = #{name}
+             , JOBLEVEL_CODE = #{joblevelCode}
+             , SKILL_CODE = #{skillCode}
+             , TELEPHONE = #{telephone}
+             , BIRTHDATE = #{birthdate}
+         WHERE NUM = #{num}
+        ]]>
+    </update>
+
+
+    <delete id="deleteEmployee">
+        <![CDATA[
+        DELETE
+          FROM SAM_EMPLOYEE
+         WHERE NUM = #{num}
+        ]]>
+    </delete>
+
+
+    <select id="retrieveEmployeeList" resultType="employee">
+        <![CDATA[
+        SELECT A.NUM
+             , A.NAME
+             , A.JOBLEVEL_CODE
+             , A.DIVISION_CODE
+             , A.DEPARTMENT_CODE
+             , A.SKILL_CODE
+             , A.TELEPHONE
+             , A.BIRTHDATE
+             , B.NAME AS "JOBLEVEL_CODE_NAME"
+             , C.NAME AS "DEPARTMENT_CODE_NAME"
+             , D.NAME AS "SKILL_CODE_NAME"
+          FROM SAM_EMPLOYEE A
+               LEFT OUTER JOIN SAM_JOBLEVEL B
+            ON A.JOBLEVEL_CODE = B.CODE
+               LEFT OUTER JOIN SAM_DEPARTMENT C
+            ON (A.DIVISION_CODE || A.DEPARTMENT_CODE) = (C.DIV_CODE || C.CODE)
+               LEFT OUTER JOIN SAM_SKILL D
+            ON A.SKILL_CODE = D.CODE
+         WHERE 1=1
+        ]]>
+        <if test="skillCode != null and skillCode != ''">
+        <![CDATA[ AND A.SKILL_CODE = #{skillCode} ]]>
+        </if>
+        <if test="joblevelCode != null and joblevelCode != ''">
+        <![CDATA[ AND A.JOBLEVEL_CODE = #{joblevelCode}  ]]>
+        </if>
+         ORDER BY A.NUM
+    </select>
+    
+    <select id="retrieveEmployeeScrollPagingList" resultType="employee">
+        <![CDATA[
+        SELECT A.NUM
+             , A.NAME
+             , A.JOBLEVEL_CODE
+             , A.DIVISION_CODE
+             , A.DEPARTMENT_CODE
+             , A.SKILL_CODE
+             , A.TELEPHONE
+             , A.BIRTHDATE
+             , B.NAME AS "JOBLEVEL_CODE_NAME"
+             , C.NAME AS "DEPARTMENT_CODE_NAME"
+             , D.NAME AS "SKILL_CODE_NAME"
+          FROM SAM_EMPLOYEE A
+               LEFT OUTER JOIN SAM_JOBLEVEL B
+            ON A.JOBLEVEL_CODE = B.CODE
+               LEFT OUTER JOIN SAM_DEPARTMENT C
+            ON (A.DIVISION_CODE || A.DEPARTMENT_CODE) = (C.DIV_CODE || C.CODE)
+               LEFT OUTER JOIN SAM_SKILL D
+            ON A.SKILL_CODE = D.CODE
+         WHERE 1=1
+        ]]>
+        <if test="skillCode != null and skillCode != ''">
+        <![CDATA[ AND A.SKILL_CODE = #{skillCode} ]]>
+        </if>
+        <if test="joblevelCode != null and joblevelCode != ''">
+        <![CDATA[ AND A.JOBLEVEL_CODE = #{joblevelCode}  ]]>
+        </if>
+    </select>
+
+    <select id="retrieveShuttleEmployeeList" resultType="employee">
+        SELECT A.NUM
+             , A.NAME
+             , B.NAME AS "JOBLEVEL_CODE_NAME"
+             , C.NAME AS "DEPARTMENT_CODE_NAME"
+          FROM
+		<choose>
+			<when test="type == 'dlt'">
+			 SAM_EMPLOYEE_DLT A
+			</when>
+			<otherwise>
+			 SAM_EMPLOYEE A
+			</otherwise>
+		</choose>
+               LEFT OUTER JOIN SAM_JOBLEVEL B
+            ON A.JOBLEVEL_CODE = B.CODE
+               LEFT OUTER JOIN SAM_DEPARTMENT C
+            ON (A.DIVISION_CODE || A.DEPARTMENT_CODE) = (C.DIV_CODE || C.CODE)
+         WHERE 1=1
+        <if test="skillCode != null and skillCode != ''">
+        <![CDATA[ AND A.skill_code = #{skillCode} ]]>
+        </if>
+        <if test="joblevelCode != null and joblevelCode != ''">
+        <![CDATA[ AND A.joblevel_code = #{joblevelCode}  ]]>
+        </if>
+        <if test="name != null and name != ''">
+        <![CDATA[ AND A.name LIKE '%'||#{name}||'%'  ]]>
+        </if>
+    </select>
+
+    <insert id="insertShuttleEmployee">
+        INSERT INTO
+        <choose>
+			<when test="type == 'dlt'">
+			 SAM_EMPLOYEE_DLT
+			</when>
+			<otherwise>
+			 SAM_EMPLOYEE
+			</otherwise>
+		</choose>
+        SELECT *
+          FROM
+        <choose>
+			<when test="type == 'dlt'">
+			 SAM_EMPLOYEE
+			</when>
+			<otherwise>
+			 SAM_EMPLOYEE_DLT
+			</otherwise>
+		</choose>
+         WHERE NUM = #{num}
+    </insert>
+
+    <delete id="deleteShuttleEmployee">
+        DELETE
+          FROM
+        <choose>
+			<when test="type == 'dlt'">
+			 SAM_EMPLOYEE
+			</when>
+			<otherwise>
+			 SAM_EMPLOYEE_DLT
+			</otherwise>
+		</choose>
+         WHERE NUM = #{num}
+    </delete>
+    
+     <select id="retrieveEmployeeDetail" resultType="employeeDetail">
+        <![CDATA[
+         SELECT NUM
+             , NOWJOB
+             , TITLE 
+             , RETIREMENT
+             , WORKINGYEAR
+             , FIRSTDATE
+             , WORKINGDATE
+             , MARRIAGE
+             , ARMY
+          FROM SAM_EMPLOYEE_MASTERDETAIL
+         WHERE NUM = #{num}  
+        ]]>
+    </select>   
+    
+    <insert id="insertEmployeeDetail">
+        <![CDATA[
+        INSERT INTO SAM_EMPLOYEE_MASTERDETAIL(
+               NUM
+             , NOWJOB
+             , TITLE 
+             , RETIREMENT
+             , WORKINGYEAR
+             , FIRSTDATE
+             , WORKINGDATE
+             , MARRIAGE
+             , ARMY
+        ) VALUES (
+               #{num}
+             , #{nowjob}
+             , #{title}
+             , #{retirement}
+             , #{workingyear}
+             , #{firstdate}
+             , #{workingdate}
+             , #{marriage}
+             , #{army}
+        ) 
+        ]]>
+    </insert>
+    
+    <update id="updateEmployeeDetail">
+        <![CDATA[
+       UPDATE SAM_EMPLOYEE_MASTERDETAIL
+           SET NOWJOB = #{nowjob} 
+             , TITLE = #{title}  
+             , RETIREMENT = #{retirement}
+             , WORKINGYEAR = #{workingyear}
+             , FIRSTDATE = #{firstdate} 
+             , WORKINGDATE = #{workingdate}
+             , MARRIAGE = #{marriage}
+             , ARMY = #{army}
+         WHERE NUM = #{num}
+        ]]>
+    </update> 
+    
+    <delete id="deleteEmployeeDetail">
+        <![CDATA[
+        DELETE 
+          FROM SAM_EMPLOYEE_MASTERDETAIL
+         WHERE NUM = #{num}
+        ]]>
+    </delete>   
+    
+     <update id="updateEmployeeForP41">
+        <![CDATA[
+       UPDATE SAM_EMPLOYEE
+           SET JOBLEVEL_CODE = #{joblevelCode}
+             , DIVISION_CODE = #{divisionCode}
+             , DEPARTMENT_CODE = #{departmentCode}
+         WHERE NUM = #{num} 
+        ]]>
+    </update>
+    
+    <select id="retrieveEmployeeTreeList" resultType="employee">
+        <![CDATA[  
+        SELECT A.CODE AS "DIVISION_CODE"
+             , B.CODE AS "DEPARTMENT_CODE"
+             , C.NUM
+             , A.NAME AS "DIVISION_CODE_NAME"
+             , B.NAME AS "DEPARTMENT_CODE_NAME"
+             , C.NAME 
+          FROM SAM_DIVISION A
+               LEFT OUTER JOIN SAM_DEPARTMENT B
+            ON A.CODE = B.DIV_CODE
+               LEFT OUTER JOIN SAM_EMPLOYEE C
+            ON A.CODE || B.CODE = C.DIVISION_CODE || C.DEPARTMENT_CODE
+         ORDER BY A.CODE
+                , B.CODE
+                , C.NUM
+        ]]>            
+    </select>   
+
+</mapper>

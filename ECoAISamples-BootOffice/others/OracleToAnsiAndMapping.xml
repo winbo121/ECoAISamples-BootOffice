@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Code">
+
+    <select id="selectSampleList" resultType="code" ><![CDATA[
+		SELECT CASE WHEN DXE.DP_CODE IS NULL THEN 0
+		                                     ELSE 1
+		                                     END CHECK_YN
+		     , UKS.MD_CODE AS MD_CODE
+		     , DCM.MD_NAME AS MD_NAME
+		     , SKR.BRAND_CODE AS BRAND_CODE
+		     , RBD.BRAND_NAME AS BRAND_NAME
+		     , SKR.STYLE_CODE AS STYLE_CODE
+		     , SKR.DP_CODE AS DP_CODE
+		     , SKR.DP_NAME AS DP_NAME
+		     , TO_CHAR(SYSDATE, 'YYYYMMDD') AS SEL_DATE
+		  FROM SAMSKR SKR,
+		       SAMUKS UKS,
+		       SAMDCM DCM,
+		       SAMRBD RBD,
+		       SAMDXE DXE
+		 WHERE UKS.STORE_CODE = '07'
+		   AND UKS.MD_CODE LIKE '%'||?||'%'
+		   AND SKR.YEAR_CODE LIKE '%'||?||'%'
+		   AND SKR.SEASON_CODE LIKE '%'||?||'%'
+		   AND SKR.BRAND_CODE LIKE '%'||?||'%'
+		   AND SKR.STYLE_CODE LIKE '%'||?||'%'
+		   AND SKR.DP_CODE LIKE '%'||?||'%'
+		   AND DCM.STORE_CODE = UKS.STORE_CODE
+		   AND DCM.MD_CODE = UKS.MD_CODE
+		   AND RBD.BRAND_CODE = SKR.BRAND_CODE
+		   AND DXE.DP_CODE(+) = SKR.DP_CODE
+	]]></select>
+
+</mapper>

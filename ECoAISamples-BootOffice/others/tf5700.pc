@@ -1,0 +1,83 @@
+/*----------------------------------------------------------------------------*/
+/* START OF PROGRAM (TF5700)                                                  */
+/*----------------------------------------------------------------------------*/
+
+void TF5700(TPSVCINFO *tb)
+{
+	G_DEBUG = 1;                                            
+    tf = (FBFR *)tb->data;                            
+    tf = (FBFR *)tprealloc((char *)tf, 65536);
+
+    memset(serviceID, 0x00, sizeof(serviceID));                
+    strcpy(serviceID, "TF5700");
+
+    notify_msg(&tb->cID, "TF5700 start");
+
+    notify_msg(&tb->cID, "TF5700 clear");
+    TF_PRINT(tf);
+    Clear();                                           
+
+    notify_msg(&tb->cID, "TF5700 get");
+    Get();                                             
+
+    Init();                                       
+    Main();                                   
+
+    if (strcmp(TF_DEFAULT.tf_code, "S") == 0) 
+    {
+        notify_msg(&tb->cID, "TF5700 Processing");
+        Msg_main();
+    }
+    else
+    if (strcmp(TF_DEFAULT.tf_code, "C") == 0) 
+    {
+        notify_msg(&tb->cID, "TF5700 Processing");
+        Msg_main();
+    }
+    else
+    if (strcmp(TF_DEFAULT.tf_code, "F") == 0) 
+    {
+
+    }
+    
+    notify_fin();                                             
+	TPRETURN(MSG_SUCCEED, "TF5700");                      
+}
+
+void Main()
+{
+    memset(tf_errmsg, 0x00, sizeof( tf_errmsg));
+
+    EXEC SQL SELECT  *
+             INTO TF_DEFAULT
+             FROM CP_TF_DEFAULT
+             WHERE ref_no = TF57.ref_no;
+
+    if(SQLCODE < 0) {
+        memset(tf43_args, 0x00, sizeof(tf43_args));
+        TF_ERR(tf_errmsg,  "ERR00057", tf43_args);
+    }
+
+    if (strcmp(TF_DEFAULT.tf_code, "S") == 0) 
+    {
+        memset(&CPTF, 0x00, sizeof(CPTF));
+        strcpy(CPTF.ref_no, TF57.ref_no);
+    }
+    else if (strcmp(TF_DEFAULT.tf_code, "C") == 0) 
+    {
+        memset(&CPTF, 0x00, sizeof(CPTF));
+        strcpy(CPTF.ref_no, TF57.ref_no);
+    }
+    else if (strcmp(TF_DEFAULT.tf_code, "F") == 0) 
+    {
+    
+    }
+
+    if (check(&CPTF) < 0) {
+        TF_ERR(tf_errmsg, 9);
+    }
+}
+
+/*----------------------------------------------------------------------------*/
+/* END OF PROGRAM (TF5700)                                                    */
+/*----------------------------------------------------------------------------*/
