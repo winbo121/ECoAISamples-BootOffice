@@ -119,11 +119,11 @@
 			<version>3.0.0</version>
 		</dependency>
 		<!-- devon tester -->
-		<dependency>
-		    <groupId>com.lide.uta</groupId>
-		    <artifactId>devon-tester-aide</artifactId>
-		    <version>0.1</version>
-		</dependency>
+<!--		<dependency>-->
+<!--		    <groupId>com.lide.uta</groupId>-->
+<!--		    <artifactId>devon-tester-aide</artifactId>-->
+<!--		    <version>0.1</version>-->
+<!--		</dependency>-->
 		<dependency>
 		    <groupId>com.lide.trex</groupId>
 		    <artifactId>trexhandler</artifactId>
