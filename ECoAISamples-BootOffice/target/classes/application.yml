@@ -16,7 +16,7 @@ spring:
   datasource:
     platform: hsqldb
     driver-class-name: org.hsqldb.jdbcDriver
-    url:  jdbc:hsqldb:file:C:\DevOnAICoding\workspace\ECoAITestDB\hsqldb\ECoAITestDB
+    url:  jdbc:hsqldb:file:/home/DevOnAICoding/workspace/ECoAITestDB/hsqldb/ECoAITestDB
     username: sa
     password: 
 #    initialization-mode: always
