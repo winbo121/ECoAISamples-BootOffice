@@ -4,6 +4,8 @@
 <head>
 </head>
 <body>
-index.jsp
+<script>
+	document.location = "<c:url value="/main.do"/>";
+</script>
 </body>
 </html>
