@@ -1,1 +1,1 @@
-Failed to execute goal on project ECoAISamples-BootStudio: Could not resolve dependencies for project devon.sample:ECoAISamples-BootStudio:war:2.0.0: Failed to collect dependencies at lena:spring-boot-starter-lena:jar:1.3.1.2: Failed to read artifact descriptor for lena:spring-boot-starter-lena:jar:1.3.1.2: Could not transfer artifact lena:spring-boot-starter-lena:pom:1.3.1.2 from/to lena-repository (https://repo.lenalab.org:8443/repository/release): Not authorized 
+
